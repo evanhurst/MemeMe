@@ -1,6 +1,6 @@
 //
 //  Meme.swift
-//  MemeMeTestApp
+//  MemeMe
 //
 //  Created by Evan Hurst on 11/18/15.
 //  Copyright © 2015 Evan Hurst. All rights reserved.

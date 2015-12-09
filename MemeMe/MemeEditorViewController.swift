@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  MemeMeTestApp
+//  MemeEditorViewController.swift
+//  MemeMe
 //
 //  Created by Evan Hurst on 11/18/15.
 //  Copyright © 2015 Evan Hurst. All rights reserved.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     //MARK: Storyboard Outlets
     @IBOutlet weak var imageView: UIImageView!
@@ -94,7 +94,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func saveMeme(sender: AnyObject) {
         let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, original: imageView.image!, memed: generateMeme())
-        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
     }
     
     func configureMemeTextFields() {
@@ -166,5 +166,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
 
+    @IBAction func cancelCreatingMeme(sender: AnyObject) {
+        
+//        if let _ = imageView.image {
+//            let cancelConfirmation = UIAlertController(title: "Cancel Edit", message: "Are you sure you want to cancel?", preferredStyle: .ActionSheet)
+//            let confirmAction = UIAlertAction(title: "Yes", style: .Default) { (action) -> Void in
+//                self.dismissViewControllerAnimated(true, completion: nil)
+//            }
+//            let undoAction = UIAlertAction(title: "No", style: .Default, handler: nil)
+//            
+//            cancelConfirmation.addAction(confirmAction)
+//            cancelConfirmation.addAction(undoAction)
+//            self.presentViewController(cancelConfirmation, animated: true, completion: nil)
+//        } else {
+//            self.dismissViewControllerAnimated(true, completion: nil)
+//        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 
