@@ -18,6 +18,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var gettingStartedLabel: UILabel!
+    @IBOutlet weak var memeContainerView: UIView!
     
     //MARK: Instance Variables
     let memeTextAttributes = [
@@ -69,16 +70,16 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     //MARK: Helper Methods
     func generateMeme() -> UIImage {
-        toolbar.hidden = true
-        navigationController?.navigationBar.hidden = true
+//        toolbar.hidden = true
+//        navigationController?.navigationBar.hidden = true
         
-        UIGraphicsBeginImageContext(view.frame.size)
-        view.drawViewHierarchyInRect(view.frame, afterScreenUpdates: true)
+        UIGraphicsBeginImageContext(memeContainerView.frame.size)
+        memeContainerView.drawViewHierarchyInRect(memeContainerView.frame, afterScreenUpdates: true)
         let memedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        toolbar.hidden = false
-        navigationController?.navigationBar.hidden = false
+//        toolbar.hidden = false
+//        navigationController?.navigationBar.hidden = false
         return memedImage
     }
     
