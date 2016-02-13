@@ -20,6 +20,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var gettingStartedLabel: UILabel!
     @IBOutlet weak var memeContainerView: UIView!
     
+    var editMeme: Meme?
+    
     //MARK: Instance Variables
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.blackColor(),
@@ -40,9 +42,18 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         super.viewWillAppear(animated)
         subscribeToKeyboardNotification()
         
-        shareButton.enabled = false
-        topTextField.hidden = true
-        bottomTextField.hidden = true
+        if let meme = editMeme {
+            gettingStartedLabel.hidden = true
+            topTextField.text = meme.topText
+            bottomTextField.text = meme.bottomText
+            imageView.image = meme.originalImage
+        } else {
+            topTextField.text = "Top Text Feild"
+            bottomTextField.text = "Bottom Text Field"
+            shareButton.enabled = false
+            topTextField.hidden = true
+            bottomTextField.hidden = true
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -63,29 +74,34 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     @IBAction func shareMeme(sender: AnyObject) {
         let activityController = UIActivityViewController(activityItems: [generateMeme()], applicationActivities: nil)
-        presentViewController(activityController, animated: true) { () -> Void in
+        activityController.completionWithItemsHandler = {(activityType, completed:Bool, returnedItems:[AnyObject]?, error: NSError?) in
+            
+            if (!completed) {
+                return
+            }
+            
             self.saveMeme(self)
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
+        presentViewController(activityController, animated: true, completion: nil)
+        
+        
     }
     
     //MARK: Helper Methods
     func generateMeme() -> UIImage {
-//        toolbar.hidden = true
-//        navigationController?.navigationBar.hidden = true
-        
-        UIGraphicsBeginImageContext(memeContainerView.frame.size)
-        memeContainerView.drawViewHierarchyInRect(memeContainerView.frame, afterScreenUpdates: true)
+        topTextField.resignFirstResponder()
+        bottomTextField.resignFirstResponder()
+        UIGraphicsBeginImageContext(imageView.frame.size)
+        memeContainerView.drawViewHierarchyInRect(imageView.frame, afterScreenUpdates: true)
         let memedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
-//        toolbar.hidden = false
-//        navigationController?.navigationBar.hidden = false
         return memedImage
     }
     
     
     func presentImagePicker(sourceType: UIImagePickerControllerSourceType) {
-        gettingStartedLabel.removeFromSuperview()
+        gettingStartedLabel.hidden = true
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = sourceType
@@ -101,8 +117,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     func configureMemeTextFields() {
         topTextField.delegate = self
         bottomTextField.delegate = self
-        topTextField.text = "Top Text Feild"
-        bottomTextField.text = "Bottom Text Field"
         topTextField.defaultTextAttributes = memeTextAttributes
         topTextField.textAlignment = .Center
         topTextField.textColor = UIColor.whiteColor()
@@ -168,21 +182,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
 
     @IBAction func cancelCreatingMeme(sender: AnyObject) {
-        
-//        if let _ = imageView.image {
-//            let cancelConfirmation = UIAlertController(title: "Cancel Edit", message: "Are you sure you want to cancel?", preferredStyle: .ActionSheet)
-//            let confirmAction = UIAlertAction(title: "Yes", style: .Default) { (action) -> Void in
-//                self.dismissViewControllerAnimated(true, completion: nil)
-//            }
-//            let undoAction = UIAlertAction(title: "No", style: .Default, handler: nil)
-//            
-//            cancelConfirmation.addAction(confirmAction)
-//            cancelConfirmation.addAction(undoAction)
-//            self.presentViewController(cancelConfirmation, animated: true, completion: nil)
-//        } else {
-//            self.dismissViewControllerAnimated(true, completion: nil)
-//        }
-        
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

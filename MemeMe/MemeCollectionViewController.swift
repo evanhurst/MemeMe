@@ -13,6 +13,7 @@ private let reuseIdentifier = "MemeCollectionViewCell"
 class MemeCollectionViewController: UICollectionViewController {
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    var selectedMeme: Meme!
     
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
@@ -49,6 +50,18 @@ class MemeCollectionViewController: UICollectionViewController {
         cell.memeImageView.image = memes[indexPath.row].memeImage!
     
         return cell
+    }
+    
+    
+
+    
+    //MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "MemeDetailSegue" {
+            let indexPath = collectionView!.indexPathForCell(sender as! MemeCollectionViewCell)!
+            let vc = segue.destinationViewController as! MemeDetailViewController
+            vc.meme = memes[indexPath.row]
+        }
     }
     
     

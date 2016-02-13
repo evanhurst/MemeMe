@@ -9,13 +9,11 @@
 import UIKit
 
 class MemeTableViewController: UITableViewController {
+    
+    var selectedMeme: Meme!
 
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,9 +37,19 @@ class MemeTableViewController: UITableViewController {
 
         return cell
     }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).memes.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+        }
+    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "MemeDetailSegue" {
+            let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)!
+            let vc = segue.destinationViewController as! MemeDetailViewController
+            vc.meme = memes[indexPath.row]
+        }
     }
 }
